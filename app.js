@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 
 const mongoose = require('./config/db');
+const { Ticket } = require('./models/ticket');
 
 const app = express(); 
 const port = 3000;
@@ -49,12 +50,35 @@ app.get('/tickets/:id',(req,res) => {
     })
 })
 
-app.post('/tickets/:id',(req,res) => {
+app.post('/tickets',(req,res) => {
     let body = req.body;
     let ticket = new Ticket(body);
     ticket.save()
-    .then((tickets) => {
-        res.send(tickets);
+    .then((ticket) => {
+        res.send(ticket);
+    })
+    .catch((err) => {
+        res.send(err);
+    })
+})
+
+app.put('/tickets/:id',(req,res) => {
+    let id = req.params.id;
+    let body = req.body;
+    Ticket.updateOne(id,body)
+    .then((ticket) => {
+        res.send(ticket);
+    })
+    .catch((err) => {
+        res.send(err);
+    })
+})
+
+app.delete('/tickets/:id',(req,res) => {
+    let id = req.params.id;
+    Ticket.deleteOne(id)
+    .then((ticket) => {
+        res.send(ticket);
     })
     .catch((err) => {
         res.send(err);
