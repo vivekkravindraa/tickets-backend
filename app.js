@@ -29,9 +29,38 @@ app.get('/',(req,res) => {
 })
 
 app.get('/tickets',(req,res) => {
+    Ticket.find()
+    .then((tickets) => {
+        res.send(tickets);
+    })
+    .catch((err) => {
+        res.send(err);
+    })
+})
 
+app.get('/tickets/:id',(req,res) => {
+    let id = req.params.id;
+    Ticket.findById(id)
+    .then((ticket) => {
+        res.send(ticket);
+    })
+    .catch((err) => {
+        res.send(err);
+    })
+})
+
+app.post('/tickets/:id',(req,res) => {
+    let body = req.body;
+    let ticket = new Ticket(body);
+    ticket.save()
+    .then((tickets) => {
+        res.send(tickets);
+    })
+    .catch((err) => {
+        res.send(err);
+    })
 })
 
 app.listen(port, () => {
-    console.log('Listening on port',port);
+    console.log(`Listening on port ${port}`);
 })
