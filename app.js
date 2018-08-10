@@ -65,7 +65,7 @@ app.post('/tickets',(req,res) => {
 app.put('/tickets/:id',(req,res) => {
     let id = req.params.id;
     let body = req.body;
-    Ticket.updateOne(id,body)
+    Ticket.findOneAndUpdate(id,body)
     .then((ticket) => {
         res.send(ticket);
     })
@@ -76,7 +76,7 @@ app.put('/tickets/:id',(req,res) => {
 
 app.delete('/tickets/:id',(req,res) => {
     let id = req.params.id;
-    Ticket.deleteOne(id)
+    Ticket.findOneAndDelete(id)
     .then((ticket) => {
         res.send(ticket);
     })
