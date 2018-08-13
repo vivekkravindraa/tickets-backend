@@ -1,4 +1,6 @@
 const express = require('express');
+const { ObjectId } = require('mongodb');
+
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 
@@ -23,6 +25,19 @@ app.use(morgan('short'));
 //     ].join(' ')
 // }));
 
+// FIXME:
+app.use((req,res,next) => {
+    let id = req.params.id;
+    if(id) {
+        if(!ObjectId.isValid(id)) {
+            res.send({
+                notice: 'invalid object id'
+            })
+        }
+    }
+    next();
+})
+
 app.get('/',(req,res) => {
     res.send({
         msg: 'Welcome to ticket master'
@@ -41,9 +56,27 @@ app.get('/tickets',(req,res) => {
 
 app.get('/tickets/:id',(req,res) => {
     let id = req.params.id;
+
+    // checking whether the id is valid or not
+    // if(!ObjectId.isValid(id)) {
+    //     res.send({
+    //         notice: 'invalid object id'
+    //     })
+    // }
+
     Ticket.findById(id)
     .then((ticket) => {
-        res.send(ticket);
+        // checking whether the id is available or not
+        if(ticket) {
+            res.send({
+                ticket,
+                notice: 'Successfully obtained the ticket'
+            });
+        } else {
+            res.send({
+                notice: 'Ticket not found'
+            })
+        }
     })
     .catch((err) => {
         res.send(err);
@@ -55,7 +88,10 @@ app.post('/tickets',(req,res) => {
     let ticket = new Ticket(body);
     ticket.save()
     .then((ticket) => {
-        res.send(ticket);
+        res.send({
+            ticket,
+            notice: 'Successfully created the ticket'
+        });
     })
     .catch((err) => {
         res.send(err);
@@ -65,9 +101,25 @@ app.post('/tickets',(req,res) => {
 app.put('/tickets/:id',(req,res) => {
     let id = req.params.id;
     let body = req.body;
-    Ticket.findOneAndUpdate(id,body)
+
+    // if(!ObjectId.isValid(id)) {
+    //     res.send({
+    //         notice: 'invalid object id'
+    //     })
+    // }
+
+    Ticket.findByIdAndUpdate(id, { $set: body}, { new: true})
     .then((ticket) => {
-        res.send(ticket);
+        if(ticket) {
+            res.send({
+                ticket,
+                notice: 'Successfully updated the ticket'
+            });
+        } else {
+            res.send({
+                notice: 'Ticket not found'
+            })
+        }
     })
     .catch((err) => {
         res.send(err);
@@ -76,9 +128,25 @@ app.put('/tickets/:id',(req,res) => {
 
 app.delete('/tickets/:id',(req,res) => {
     let id = req.params.id;
-    Ticket.findOneAndDelete(id)
+
+    // if(!ObjectId.isValid(id)) {
+    //     res.send({
+    //         notice: 'invalid object id'
+    //     })
+    // }
+
+    Ticket.findByIdAndRemove(id)
     .then((ticket) => {
-        res.send(ticket);
+        if(ticket) {
+            res.send({
+                ticket,
+                notice: 'Successfully deleted the ticket'
+            });
+        } else {
+            res.send({
+                notice: 'Ticket not found'
+            })
+        }
     })
     .catch((err) => {
         res.send(err);
