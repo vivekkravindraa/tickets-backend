@@ -1,4 +1,6 @@
 const express = require('express');
+const _ = require('lodash');
+
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 
