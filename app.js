@@ -1,5 +1,6 @@
 const express = require('express');
 const { ObjectId } = require('mongodb');
+const _ = require('lodash');
 
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
@@ -11,6 +12,7 @@ const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
+
 // app.use(morgan('dev'));
 app.use(morgan('short'));
 // app.use(morgan('tiny'));
@@ -25,18 +27,26 @@ app.use(morgan('short'));
 //     ].join(' ')
 // }));
 
+// app.use('tickets/:id',(req,res,next) => {
+//     let id = req.params.id;
+//     if(!ObjectId.isValid(id)) {
+//         res.send({
+//             notice: 'invalid object id'
+//         })
+//     }
+//     next();
+// })
+
 // FIXME:
-app.use((req,res,next) => {
-    let id = req.params.id;
-    if(id) {
-        if(!ObjectId.isValid(id)) {
-            res.send({
-                notice: 'invalid object id'
-            })
-        }
-    }
-    next();
-})
+// app.param('id',(req,res,next) => {
+//     let id = req.params.id;
+//     if(!ObjectId.isValid(id)) {
+//         res.send({
+//             notice: 'invalid object id'
+//         })
+//     }
+//     next();
+// })
 
 app.get('/',(req,res) => {
     res.send({
@@ -84,8 +94,13 @@ app.get('/tickets/:id',(req,res) => {
 })
 
 app.post('/tickets',(req,res) => {
-    let body = req.body;
+    // let body = req.body;
+
+    // _.pick() provided by lodash library
+    // strong parameter check
+    let body = _.pick(req.body, ['name', 'department', 'priority', 'message']);
     let ticket = new Ticket(body);
+
     ticket.save()
     .then((ticket) => {
         res.send({
@@ -100,13 +115,16 @@ app.post('/tickets',(req,res) => {
 
 app.put('/tickets/:id',(req,res) => {
     let id = req.params.id;
-    let body = req.body;
+    // let body = req.body;
 
     // if(!ObjectId.isValid(id)) {
     //     res.send({
     //         notice: 'invalid object id'
     //     })
     // }
+
+    // parameters allowed to be updated
+    let body = _.pick(req.body, ['name', 'department', 'priority', 'message', 'status']);
 
     Ticket.findByIdAndUpdate(id, { $set: body}, { new: true})
     .then((ticket) => {
