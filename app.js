@@ -8,7 +8,7 @@ const morgan = require('morgan');
 const mongoose = require('./config/db');
 const { Ticket } = require('./models/ticket');
 
-const app = express(); 
+const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
