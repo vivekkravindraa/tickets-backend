@@ -37,7 +37,7 @@ app.use(morgan('short'));
 //     next();
 // })
 
-// FIXME:
+// FIXME: trowing promise rejection handling warning
 // app.param('id',(req,res,next) => {
 //     let id = req.params.id;
 //     if(!ObjectId.isValid(id)) {
