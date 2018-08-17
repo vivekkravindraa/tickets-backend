@@ -7,6 +7,7 @@ const morgan = require('morgan');
 
 const mongoose = require('./config/db');
 const { Ticket } = require('./models/ticket');
+const { Employee } = require('./models/employee');
 
 const app = express();
 const port = 3000;
@@ -54,17 +55,107 @@ app.get('/',(req,res) => {
     })
 })
 
-app.get('/tickets',(req,res) => {
-    Ticket.find()
-    .then((tickets) => {
-        res.send(tickets);
+// app.get('/tickets',(req,res) => {
+//     Ticket.find()
+//     .then((tickets) => {
+//         res.send(tickets);
+//     })
+//     .catch((err) => {
+//         res.send(err);
+//     })
+// })
+
+// app.get('/tickets/:id',(req,res) => {
+//     let id = req.params.id;
+
+//     // checking whether the id is valid or not
+//     // if(!ObjectId.isValid(id)) {
+//     //     res.send({
+//     //         notice: 'invalid object id'
+//     //     })
+//     // }
+
+//     Ticket.findById(id)
+//     .then((ticket) => {
+//         // checking whether the id is available or not
+//         if(ticket) {
+//             res.send({
+//                 ticket,
+//                 notice: 'Successfully obtained the ticket'
+//             });
+//         } else {
+//             res.send({
+//                 notice: 'Ticket not found'
+//             })
+//         }
+//     })
+//     .catch((err) => {
+//         res.send(err);
+//     })
+// })
+
+// app.post('/tickets',(req,res) => {
+//     // let body = req.body;
+
+//     // _.pick() provided by lodash library
+//     // strong parameter check
+//     let body = _.pick(req.body, ['name', 'department', 'priority', 'message']);
+//     let ticket = new Ticket(body);
+
+//     ticket.save()
+//     .then((ticket) => {
+//         res.send({
+//             ticket,
+//             notice: 'Successfully created the ticket'
+//         });
+//     })
+//     .catch((err) => {
+//         res.send(err);
+//     })
+// })
+
+// app.put('/tickets/:id',(req,res) => {
+//     let id = req.params.id;
+//     // let body = req.body;
+
+//     // if(!ObjectId.isValid(id)) {
+//     //     res.send({
+//     //         notice: 'invalid object id'
+//     //     })
+//     // }
+
+//     // parameters allowed to be updated
+//     let body = _.pick(req.body, ['name', 'department', 'priority', 'message', 'status']);
+
+//     Ticket.findByIdAndUpdate(id, { $set: body}, { new: true})
+//     .then((ticket) => {
+//         if(ticket) {
+//             res.send({
+//                 ticket,
+//                 notice: 'Successfully updated the ticket'
+//             });
+//         } else {
+//             res.send({
+//                 notice: 'Ticket not found'
+//             })
+//         }
+//     })
+//     .catch((err) => {
+//         res.send(err);
+//     })
+// })
+
+app.get('/employees',(req,res) => {
+    Employee.find()
+    .then((employees) => {
+        res.send(employees);
     })
     .catch((err) => {
         res.send(err);
     })
 })
 
-app.get('/tickets/:id',(req,res) => {
+app.get('/employees/:id',(req,res) => {
     let id = req.params.id;
 
     // checking whether the id is valid or not
@@ -74,17 +165,17 @@ app.get('/tickets/:id',(req,res) => {
     //     })
     // }
 
-    Ticket.findById(id)
-    .then((ticket) => {
+    Employee.findById(id)
+    .then((employee) => {
         // checking whether the id is available or not
-        if(ticket) {
+        if(employee) {
             res.send({
-                ticket,
-                notice: 'Successfully obtained the ticket'
+                employee,
+                notice: 'Successfully obtained the employee'
             });
         } else {
             res.send({
-                notice: 'Ticket not found'
+                notice: 'Employee not found'
             })
         }
     })
@@ -93,19 +184,19 @@ app.get('/tickets/:id',(req,res) => {
     })
 })
 
-app.post('/tickets',(req,res) => {
-    // let body = req.body;
+app.post('/employees',(req,res) => {
+    let body = req.body;
 
     // _.pick() provided by lodash library
     // strong parameter check
-    let body = _.pick(req.body, ['name', 'department', 'priority', 'message']);
-    let ticket = new Ticket(body);
+    // let body = _.pick(req.body, []);
+    let employee = new Employee(body);
 
-    ticket.save()
-    .then((ticket) => {
+    employee.save()
+    .then((employee) => {
         res.send({
-            ticket,
-            notice: 'Successfully created the ticket'
+            employee,
+            notice: 'Successfully created the employee'
         });
     })
     .catch((err) => {
@@ -113,9 +204,9 @@ app.post('/tickets',(req,res) => {
     })
 })
 
-app.put('/tickets/:id',(req,res) => {
+app.put('/employees/:id',(req,res) => {
     let id = req.params.id;
-    // let body = req.body;
+    let body = req.body;
 
     // if(!ObjectId.isValid(id)) {
     //     res.send({
@@ -124,19 +215,19 @@ app.put('/tickets/:id',(req,res) => {
     // }
 
     // parameters allowed to be updated
-    let body = _.pick(req.body, ['name', 'department', 'priority', 'message', 'status']);
+    // let body = _.pick(req.body, []);
 
-    Ticket.findByIdAndUpdate(id, { $set: body}, { new: true})
-    .then((ticket) => {
-        if(ticket) {
+    Employee.findByIdAndUpdate(id, { $set: body}, { new: true})
+    .then((employee) => {
+        if(employee) {
             res.send({
-                ticket,
-                notice: 'Successfully updated the ticket'
+                employee,
+                notice: 'Successfully updated the employee'
             });
         } else {
             res.send({
-                notice: 'Ticket not found'
-            })
+                notice: 'Employee not found'
+            });
         }
     })
     .catch((err) => {
@@ -144,7 +235,7 @@ app.put('/tickets/:id',(req,res) => {
     })
 })
 
-app.delete('/tickets/:id',(req,res) => {
+app.delete('/employees/:id',(req,res) => {
     let id = req.params.id;
 
     // if(!ObjectId.isValid(id)) {
@@ -153,17 +244,17 @@ app.delete('/tickets/:id',(req,res) => {
     //     })
     // }
 
-    Ticket.findByIdAndRemove(id)
-    .then((ticket) => {
-        if(ticket) {
+    Employee.findByIdAndRemove(id)
+    .then((employee) => {
+        if(employee) {
             res.send({
-                ticket,
-                notice: 'Successfully deleted the ticket'
+                employee,
+                notice: 'Successfully deleted the '
             });
         } else {
             res.send({
-                notice: 'Ticket not found'
-            })
+                notice: 'Employee not found'
+            });
         }
     })
     .catch((err) => {

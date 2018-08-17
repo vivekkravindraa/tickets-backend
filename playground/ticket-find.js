@@ -63,4 +63,3 @@ const { Ticket } = require('../models/ticket');     // requiring Class/Model fil
 // Ticket.find().sort({createdAt: -1}).then((tickets) => {
 //     console.log(tickets);
 // })
-
