@@ -38,10 +38,11 @@ app.use(morgan('short'));
 //     next();
 // })
 
-// FIXME: throwing promise rejection handling - deprecated warning
+// FIXME: throwing unhandled promise rejection - deprecated warning
 // app.param('id',(req,res,next) => {
 //     let id = req.params.id;
 //     if(!ObjectId.isValid(id)) {
+//         // return false;
 //         res.send({
 //             notice: 'invalid object id'
 //         })
