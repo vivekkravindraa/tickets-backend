@@ -244,18 +244,33 @@ app.get('/employees/:id/mobile_numbers',(req,res) => {
     })
 })
 
+// FIXME: throwing Unhandled promise rejection warning
 app.post('/employees/:id/mobile_numbers',(req,res) => {
     let id = req.params.id;
     let body = req.body;
     Employee.findById(id).then((employee) => {
         if(employee) {
             employee.mobileNumbers.push(body);
-            return employee.save();                 // resolving the promise in the next .then block 
+            // ----------------------
+            // let newMobile = employee.mobileNumbers[employee.mobileNumbers.length - 1];
+            // employee.save()
+            // .then((employee) => {
+            //     res.send({
+            //         newMobile,
+            //         notice: 'Successfully added mobile number'
+            //     })
+            // })
+            // .catch((err) => {
+            //     res.send(err);
+            // })
+            // ----------------------
+            return employee.save();                 // resolving the promise in the next .then(){} block
         }
         res.send({
             notice: 'Employee not found'
         })
-    }).then((employee) => {
+    })
+    .then((employee) => {
         let newMobile = employee.mobileNumbers[employee.mobileNumbers.length - 1];
         res.send({
             newMobile,
