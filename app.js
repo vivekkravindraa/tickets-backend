@@ -229,6 +229,43 @@ app.get('/employees/:id',(req,res) => {
     })
 })
 
+app.get('/employees/:id/mobile_numbers',(req,res) => {
+    let id = req.params.id;
+    Employee.findById(id).select(['id','name','mobileNumbers'])
+    .then((employee) => {
+        if(employee) {
+            res.send(employee);
+        }
+        res.send({
+            notice:  'Employee not found'
+        })
+    }).catch((err) => {
+        res.send(err);
+    })
+})
+
+app.post('/employees/:id/mobile_numbers',(req,res) => {
+    let id = req.params.id;
+    let body = req.body;
+    Employee.findById(id).then((employee) => {
+        if(employee) {
+            employee.mobileNumbers.push(body);
+            return employee.save();                 // resolving the promise in the next .then block 
+        }
+        res.send({
+            notice: 'Employee not found'
+        })
+    }).then((employee) => {
+        let newMobile = employee.mobileNumbers[employee.mobileNumbers.length - 1];
+        res.send({
+            newMobile,
+            notice: 'Successfully added mobile number'
+        })
+    }).catch((err) => {
+        res.send(err);
+    })
+})
+
 app.post('/employees',(req,res) => {
     // let body = req.body;
 
