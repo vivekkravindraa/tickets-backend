@@ -38,7 +38,7 @@ app.use(morgan('short'));
 //     next();
 // })
 
-// FIXME: trowing promise rejection handling warning
+// FIXME: throwing promise rejection handling - deprecated warning
 // app.param('id',(req,res,next) => {
 //     let id = req.params.id;
 //     if(!ObjectId.isValid(id)) {
@@ -55,15 +55,15 @@ app.get('/',(req,res) => {
     })
 })
 
-// app.get('/tickets',(req,res) => {
-//     Ticket.find()
-//     .then((tickets) => {
-//         res.send(tickets);
-//     })
-//     .catch((err) => {
-//         res.send(err);
-//     })
-// })
+app.get('/tickets',(req,res) => {
+    Ticket.find()
+    .then((tickets) => {
+        res.send(tickets);
+    })
+    .catch((err) => {
+        res.send(err);
+    })
+})
 
 // app.get('/tickets/:id',(req,res) => {
 //     let id = req.params.id;
@@ -145,6 +145,28 @@ app.get('/',(req,res) => {
 //     })
 // })
 
+// FIXME:
+app.get('/tickets/latest/3',(req,res) => {
+    Ticket.find().limit(3)
+    .then((tickets) => {
+        res.send(tickets);
+    })
+    .catch((err) => {
+        res.send(err);
+    })
+})
+
+// FIXME:
+app.get('/tickets/:department',(req,res) => {
+    Ticket.find({department: 'Technical'})
+    .then((tickets) => {
+        res.send(tickets);
+    })
+    .catch((err) => {
+        res.send(err);
+    })
+})
+
 app.get('/employees',(req,res) => {
     Employee.find()
     .then((employees) => {
@@ -154,6 +176,29 @@ app.get('/employees',(req,res) => {
         res.send(err);
     })
 })
+
+app.get('/employees/list',(req,res) => {
+    let params = req.query;
+    let orderBy = params.order == "ASC" ? 1: -1;
+    let query = {};
+    query[params.sort] = orderBy;
+
+    Employee.find().sort(query)
+    .then((employees) => {
+        res.send(employees);
+    })
+    .catch((err) => {
+        res.send(err);
+    })
+})
+
+// app.get('/employees/listByAge',(req,res) => {
+// TODO:
+// let params = req.query;
+// let minValue = params.min;
+// let maxValue = params.max;
+// let query = {min: minValue, max: maxValue}; 
+// })
 
 app.get('/employees/:id',(req,res) => {
     let id = req.params.id;
@@ -185,11 +230,11 @@ app.get('/employees/:id',(req,res) => {
 })
 
 app.post('/employees',(req,res) => {
-    let body = req.body;
+    // let body = req.body;
 
     // _.pick() provided by lodash library
     // strong parameter check
-    // let body = _.pick(req.body, []);
+    let body = _.pick(req.body, ['name','email','department','salary','ageWhileJoining','address','hobbies','luckyNumbers','mobileNumbers']);
     let employee = new Employee(body);
 
     employee.save()
@@ -249,7 +294,7 @@ app.delete('/employees/:id',(req,res) => {
         if(employee) {
             res.send({
                 employee,
-                notice: 'Successfully deleted the '
+                notice: 'Successfully deleted the employee'
             });
         } else {
             res.send({

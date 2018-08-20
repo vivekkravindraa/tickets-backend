@@ -6,18 +6,18 @@ const { Ticket } = require('../models/ticket');     // requiring Class/Model fil
 // for 'posting' multiple records
 // calling .create() method on Class/Model as 'static'
 Ticket.create(
-    {
-        name: "Ravi",
-        department: "HR",
-        priority: "Low",
-        message: "Opening in company"
-    },
-    {
-        name: "Kusuma",
-        department: "HR",
-        priority: "High",
-        message: "Applied for vacancy"
-    }
+    // {
+    //     name: "Ravi",
+    //     department: "HR",
+    //     priority: "Low",
+    //     message: "Opening in company"
+    // },
+    // {
+    //     name: "Kusuma",
+    //     department: "HR",
+    //     priority: "High",
+    //     message: "Applied for vacancy"
+    // }
 )
 .then((tickets) => {
     console.log(tickets);

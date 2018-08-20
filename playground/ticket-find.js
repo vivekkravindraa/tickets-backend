@@ -37,7 +37,7 @@ const { Ticket } = require('../models/ticket');     // requiring Class/Model fil
 // })
 
 // limits number of objs to be sent back
-// Ticket.find({department: 'Technical',}).limit(2).then((tickets) => {
+// Ticket.find({department: 'Technical'}).limit(2).then((tickets) => {
 //     console.log(tickets);
 // })
 
