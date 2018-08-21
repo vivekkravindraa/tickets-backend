@@ -7,12 +7,12 @@ const { Ticket } = require('../models/ticket');     // requiring Class/Model fil
 // })
 
 // find all the tickets based on priority
-// Ticket.find({priority: 'High'}).then((tickets) => {
+// Ticket.find({ priority: 'High' }).then((tickets) => {
 //     console.log(tickets);
 // })
 
 // find all the tickets based on department
-// Ticket.find({department: 'Technical'}).then((tickets) => {
+// Ticket.find({ department: 'Technical' }).then((tickets) => {
 //     console.log(tickets);
 // })
 
@@ -27,7 +27,7 @@ const { Ticket } = require('../models/ticket');     // requiring Class/Model fil
 // })
 
 // to find one record
-// Ticket.findOne({department: 'Technical', priority: 'High'}).then((ticket) => {
+// Ticket.findOne({ department: 'Technical', priority: 'High' }).then((ticket) => {
 //     console.log(ticket);
 // })
 
@@ -37,7 +37,7 @@ const { Ticket } = require('../models/ticket');     // requiring Class/Model fil
 // })
 
 // limits number of objs to be sent back
-// Ticket.find({department: 'Technical'}).limit(2).then((tickets) => {
+// Ticket.find({ department: 'Technical' }).limit(2).then((tickets) => {
 //     console.log(tickets);
 // })
 
@@ -55,11 +55,11 @@ const { Ticket } = require('../models/ticket');     // requiring Class/Model fil
 // })
 
 // sort name based on ascending order
-// Ticket.find().sort({name: 1}).then((tickets) => {
+// Ticket.find().sort({ name: 1 }).then((tickets) => {
 //     console.log(tickets);
 // })
 
 // sort createdAt based on descending order
-// Ticket.find().sort({createdAt: -1}).then((tickets) => {
+// Ticket.find().sort({ createdAt: -1 }).then((tickets) => {
 //     console.log(tickets);
 // })

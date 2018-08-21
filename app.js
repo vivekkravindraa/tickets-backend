@@ -56,15 +56,15 @@ app.get('/',(req,res) => {
     })
 })
 
-app.get('/tickets',(req,res) => {
-    Ticket.find()
-    .then((tickets) => {
-        res.send(tickets);
-    })
-    .catch((err) => {
-        res.send(err);
-    })
-})
+// app.get('/tickets',(req,res) => {
+//     Ticket.find()
+//     .then((tickets) => {
+//         res.send(tickets);
+//     })
+//     .catch((err) => {
+//         res.send(err);
+//     })
+// })
 
 // app.get('/tickets/:id',(req,res) => {
 //     let id = req.params.id;
@@ -230,58 +230,6 @@ app.get('/employees/:id',(req,res) => {
     })
 })
 
-app.get('/employees/:id/mobile_numbers',(req,res) => {
-    let id = req.params.id;
-    Employee.findById(id).select(['id','name','mobileNumbers'])
-    .then((employee) => {
-        if(employee) {
-            res.send(employee);
-        }
-        res.send({
-            notice:  'Employee not found'
-        })
-    }).catch((err) => {
-        res.send(err);
-    })
-})
-
-// FIXME: throwing Unhandled promise rejection warning
-app.post('/employees/:id/mobile_numbers',(req,res) => {
-    let id = req.params.id;
-    let body = req.body;
-    Employee.findById(id).then((employee) => {
-        if(employee) {
-            employee.mobileNumbers.push(body);
-            // ----------------------
-            // let newMobile = employee.mobileNumbers[employee.mobileNumbers.length - 1];
-            // employee.save()
-            // .then((employee) => {
-            //     res.send({
-            //         newMobile,
-            //         notice: 'Successfully added mobile number'
-            //     })
-            // })
-            // .catch((err) => {
-            //     res.send(err);
-            // })
-            // ----------------------
-            return employee.save();                 // resolving the promise in the next .then(){} block
-        }
-        res.send({
-            notice: 'Employee not found'
-        })
-    })
-    .then((employee) => {
-        let newMobile = employee.mobileNumbers[employee.mobileNumbers.length - 1];
-        res.send({
-            newMobile,
-            notice: 'Successfully added mobile number'
-        })
-    }).catch((err) => {
-        res.send(err);
-    })
-})
-
 app.post('/employees',(req,res) => {
     // let body = req.body;
 
@@ -354,6 +302,109 @@ app.delete('/employees/:id',(req,res) => {
                 notice: 'Employee not found'
             });
         }
+    })
+    .catch((err) => {
+        res.send(err);
+    })
+})
+
+app.get('/employees/:id/mobile_numbers',(req,res) => {
+    let id = req.params.id;
+    Employee.findById(id).select(['id','name','mobileNumbers'])
+    .then((employee) => {
+        if(employee) {
+            res.send(employee);
+        }
+        res.send({
+            notice:  'Employee not found'
+        })
+    }).catch((err) => {
+        res.send(err);
+    })
+})
+
+// FIXME: throwing Unhandled promise rejection warning
+app.post('/employees/:id/mobile_numbers',(req,res) => {
+    let id = req.params.id;
+    let body = req.body;
+    Employee.findById(id).then((employee) => {
+        if(employee) {
+            employee.mobileNumbers.push(body);
+            // ----------------------
+            // let newMobile = employee.mobileNumbers[employee.mobileNumbers.length - 1];
+            // employee.save()
+            // .then((employee) => {
+            //     res.send({
+            //         newMobile,
+            //         notice: 'Successfully added mobile number'
+            //     })
+            // })
+            // .catch((err) => {
+            //     res.send(err);
+            // })
+            // ----------------------
+            return employee.save();                 // resolving the promise in the next .then(){} block
+        }
+        res.send({
+            notice: 'Employee not found'
+        })
+    })
+    .then((employee) => {
+        let newMobile = employee.mobileNumbers[employee.mobileNumbers.length - 1];
+        res.send({
+            newMobile,
+            notice: 'Successfully added mobile number'
+        })
+    }).catch((err) => {
+        res.send(err);
+    })
+})
+
+// TODO:
+app.put('/employees/:id/mobile_numbers/:mobile_id',(req,res) => {
+    let id = req.params.id;
+    let mobileId = req.params.mobile_id;
+    let body = _.pick(req.body, ['numType','mobileNumber']);
+
+    Employee.findById(id)
+    .then((employee) => {
+        if(employee) {
+            let mobileDetail = employee.mobileNumbers.id(mobileId);
+            mobileDetail.numType = body.numType ? body.numType : mobileDetail.numType;
+            mobileDetail.mobileNumber = body.mobileNumber ? body.mobileNumber : mobileDetail.mobileNumber;
+            return employee.save()
+        }
+        res.send({
+            notice: 'Employee not found'
+        })
+    })
+    .then((employee) => {
+        res.send({
+            mobileNumber: employee.mobileNumbers.id(mobileId),
+            notice: 'Successfully updated mobile number'
+        })
+    })
+    .catch((err) => {
+        res.send(err)
+    })
+})
+
+app.delete('/employees/:id/mobile_numbers/:mobile_id',(req,res) => {
+    let id = req.params.id;
+    let mobileId = req.params.mobile_id;
+    Employee.findById(id)
+    .then((employee) => {
+        if(employee) {
+            employee.mobileNumbers.remove(mobileId);
+            return employee.save()
+        }
+        res.send({
+            notice: 'Employee not found'
+        })
+    }).then((employee) => {
+        res.send({
+            notice: 'Successfully removed the contact number'
+        })
     })
     .catch((err) => {
         res.send(err);
