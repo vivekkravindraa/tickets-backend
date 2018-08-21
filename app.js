@@ -10,7 +10,7 @@ const { Ticket } = require('./models/ticket');
 const { Employee } = require('./models/employee');
 
 const { ticketsRouter } = require('./routes/tickets');
-const { employeesRouter } = require('../../react/employees');
+const { employeesRouter } = require('./routes/employees');
 
 const app = express();
 const port = 3000;
