@@ -4,43 +4,7 @@ const _ = require('lodash');
 
 const router = express.Router();
 
-router.get('/',(req,res) => {
-    Employee.find()
-    .then((employees) => {
-        res.send(employees);
-    })
-    .catch((err) => {
-        res.send(err);
-    })
-})
-
-router.get('/:id',(req,res) => {
-    Employee.findById(req.params.id)
-    .then((employee) => {
-        res.send(employee.shortInfo());
-    })
-    .catch((err) => {
-        res.send(err);
-    });
-});
-
-// calling 'instance method' on the value returned by the class 'Employee' 
-router.get('/show/short_info',(req,res) => {
-    Employee.find()
-    .then((employees) => {
-        // let result = [];
-        // for(let emp of employees) {
-        //    result.push(emp.shortInfo())
-        // }
-        // res.send(result);
-        let result = employees.map(emp => emp.shortInfo());
-        res.send(result);
-    })
-    .catch((err) => {
-        res.send(err);
-    })
-});
-
+// GET /employees/list?sort=name&order=ASC
 router.get('/list',(req,res) => {
     let params = req.query;
     let orderBy = params.order == "ASC" ? 1: -1;
@@ -56,13 +20,57 @@ router.get('/list',(req,res) => {
     })
 })
 
-// router.get('/listByAge',(req,res) => {
-// TODO:
-// let params = req.query;
-// let minValue = params.min;
-// let maxValue = params.max;
-// let query = {min: minValue, max: maxValue}; 
-// })
+// GET /employees/listByAge?min=20&max=30
+router.get('/listByAge',(req,res) => {
+    let params = req.query;
+    
+    Employee.where('ageWhileJoining').gte(parseInt(params.min)).lte(parseInt(params.max))
+    .then((employees) => {
+        res.send(employees);
+    })
+    .catch((err) => {
+        res.send(err);
+    })
+})
+
+router.get('/',(req,res) => {
+    Employee.find()
+    .then((employees) => {
+        res.send(employees);
+    })
+    .catch((err) => {
+        res.send(err);
+    })
+})
+
+// calling an user-defined 'instance method' shortInfo()
+router.get('/:id',(req,res) => {
+    Employee.findById(req.params.id)
+    .then((employee) => {
+        res.send(employee.shortInfo());
+    })
+    .catch((err) => {
+        res.send(err);
+    });
+});
+
+// calling 'instance method' on the value returned [{},{},{},...] by the class 'Employee' 
+router.get('/show/short_info',(req,res) => {
+    Employee.find()
+    .then((employees) => {
+        // using 'for - of' as a substitute for 'forEach'
+        // let result = [];
+        // for(let emp of employees) {
+        //    result.push(emp.shortInfo())
+        // }
+        // res.send(result);
+        let result = employees.map(emp => emp.shortInfo());
+        res.send(result);
+    })
+    .catch((err) => {
+        res.send(err);
+    })
+});
 
 router.get('/:id',(req,res) => {
     let id = req.params.id;
@@ -146,7 +154,7 @@ router.put('/:id',(req,res) => {
 
 router.delete('/:id',(req,res) => {
     let id = req.params.id;
-
+    
     // if(!ObjectId.isValid(id)) {
     //     res.send({
     //         notice: 'invalid object id'
@@ -173,6 +181,7 @@ router.delete('/:id',(req,res) => {
 
 router.get('/:id/mobile_numbers',(req,res) => {
     let id = req.params.id;
+    
     Employee.findById(id).select(['id','name','mobileNumbers'])
     .then((employee) => {
         if(employee) {
@@ -189,7 +198,9 @@ router.get('/:id/mobile_numbers',(req,res) => {
 router.post('/:id/mobile_numbers',(req,res) => {
     let id = req.params.id;
     let body = req.body;
-    Employee.findById(id).then((employee) => {
+
+    Employee.findById(id)
+    .then((employee) => {
         if(employee) {
             employee.mobileNumbers.push(body);
             return employee.save();                 // resolving the promise in the next .then(){} block
@@ -240,6 +251,7 @@ router.put('/:id/mobile_numbers/:mobile_id',(req,res) => {
 router.delete('/:id/mobile_numbers/:mobile_id',(req,res) => {
     let id = req.params.id;
     let mobileId = req.params.mobile_id;
+    
     Employee.findById(id)
     .then((employee) => {
         if(employee) {

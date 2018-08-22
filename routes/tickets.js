@@ -113,9 +113,36 @@ router.put('/:id',(req,res) => {
     })
 })
 
-// FIXME:
-router.get('/latest/3',(req,res) => {
-    Ticket.find().limit(3)
+router.delete('/:id',(req,res) => {
+    let id = req.params.id;
+    
+    // if(!ObjectId.isValid(id)) {
+    //     res.send({
+    //         notice: 'invalid object id'
+    //     })
+    // }
+
+    Ticket.findByIdAndRemove(id)
+    .then((ticket) => {
+        if(ticket) {
+            res.send({
+                ticket,
+                notice: 'Successfully deleted the employee'
+            });
+        } else {
+            res.send({
+                notice: 'Employee not found'
+            });
+        }
+    })
+    .catch((err) => {
+        res.send(err);
+    })
+})
+
+router.get('/latest/:value',(req,res) => {
+    let value = req.params.value;
+    Ticket.find().limit(parseInt(value))
     .then((tickets) => {
         res.send(tickets);
     })
@@ -124,9 +151,9 @@ router.get('/latest/3',(req,res) => {
     })
 })
 
-// FIXME:
-router.get('/:department',(req,res) => {
-    Ticket.find({department: 'Technical'})
+router.get('/department/:name',(req,res) => {
+    let name = req.params.name;  
+    Ticket.find({ department: `${name}` })
     .then((tickets) => {
         res.send(tickets);
     })

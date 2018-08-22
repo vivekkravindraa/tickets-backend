@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose');       // requiring mongoose
 
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema;             // obtaining the Schema object
 
-const employeeSchema = new Schema({
+const employeeSchema = new Schema({         // creating the Schema
     name: {
         type: String,  
         required: true
@@ -63,6 +63,8 @@ module.exports = {
     Employee
 }
 
+// Sample Object
+
 // {
 // 	"name": "Ram",
 // 	"email": "ram@gmail.com",
@@ -79,8 +81,3 @@ module.exports = {
 // 		"numType": "Home",
 // 		"mobileNumber": "9140234567" }]
 // }
-
-// the role of the ODM is to map
-// a model to a collection
-// model's object to a collection's document
-// object's property to a document's field

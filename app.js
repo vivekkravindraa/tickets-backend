@@ -1,19 +1,19 @@
-const express = require('express');
-const { ObjectId } = require('mongodb');
-const _ = require('lodash');
+const express = require('express');                             // requiring express package
+const { ObjectId } = require('mongodb');                        // requiring mongodb package
+const _ = require('lodash');                                    // requiring lodash package
 
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
+const bodyParser = require('body-parser');                      // requiring bodyParser package
+const morgan = require('morgan');                               // requiring morgan package
 
-const mongoose = require('./config/db');
-const { Ticket } = require('./models/ticket');
-const { Employee } = require('./models/employee');
+const mongoose = require('./config/db');                        // requiring configured-db
+const { Ticket } = require('./models/ticket');                  // requiring model-ticket
+const { Employee } = require('./models/employee');              // requiring model-employee
 
-const { ticketsRouter } = require('./routes/tickets');
-const { employeesRouter } = require('./routes/employees');
+const { ticketsRouter } = require('./routes/tickets');          // requiring routes-tickets
+const { employeesRouter } = require('./routes/employees');      // requiring routes-employees
 
-const app = express();
-const port = 3000;
+const app = express();                                          // obtaining express() returned function 
+const port = 3000;                                              // setting localhost port number
 
 app.use(bodyParser.json());
 
@@ -45,17 +45,19 @@ app.use('/employees',employeesRouter);
 //     next();
 // })
 
-app.param('id',(req,res,next) => {
-    let id = req.params.id;
-    if(!ObjectId.isValid(id)) {
-        res.send({
-            notice: 'invalid object id'
-        })
-        return false;
-    }
-    next();
-})
+// Results 'CAST ERROR'
+// app.param('id',(req,res,next) => {
+//     let id = req.params.id;
+//     if(!ObjectId.isValid(id)) {
+//         res.send({
+//             notice: 'invalid object id'
+//         })
+//         return false;
+//     }
+//     next();
+// })
 
+// app.METHOD(PATH,HANDLER)
 app.get('/',(req,res) => {
     res.send({
         msg: 'Welcome to ticket master'
