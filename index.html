@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Employee Listing</title>
+</head>
+<body>
+
+    <h2>EMPLOYEE LISTING - <span id="count"></span></h2>
+    <div id="app">
+
+    </div>
+
+    <form>
+        <h2>ADD CONTACT</h2>
+
+        <label for="empNames">Employee Name: </label>
+        <select id="empNames">
+            <option>Select Here</option>
+        </select><br/><br/>
+
+        <label for="numTypes">Number Type: </label>
+        <select id ="numTypes">
+            <option>Select Here</option>
+            <option value="Home">Home</option>
+            <option value="Office">Office</option>
+            <option value="Personal">Personal</option>
+            <option value="Residence">Office</option>
+        </select><br/><br/>
+
+        <label for="mobNumber">Mobile Number: </label>
+        <input type="text" id="mobNumber" name="mobNumber" value="" /><br/><br/>
+        
+        <input type="submit" id="submit" value="Submit" />
+    </form>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="script.js"></script>
+
+</body>
+</html>
