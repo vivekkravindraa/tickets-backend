@@ -48,6 +48,15 @@ const employeeSchema = new Schema({
     ]
 });
 
+employeeSchema.methods.shortInfo = function() {
+    return {
+        _id: this._id,
+        name: this.name,
+        email: this.email,
+        numberCount: this.mobileNumbers.length
+    }
+}
+
 const Employee = mongoose.model('Employees',employeeSchema);
 
 module.exports = {
@@ -70,3 +79,8 @@ module.exports = {
 // 		"numType": "Home",
 // 		"mobileNumber": "9140234567" }]
 // }
+
+// the role of the ODM is to map
+// a model to a collection
+// model's object to a collection's document
+// object's property to a document's field

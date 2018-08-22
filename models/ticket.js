@@ -29,12 +29,16 @@ const ticketSchema = mongoose.Schema({
 
 // Do not define instance or class methods in arrow functions
 ticketSchema.statics.openTickets = function() {
-    return this.openTickets({status: 'open'});
+    return this.find({status: 'open'});
     // 'this' here refers to the class 'Ticket'
 }
 
 ticketSchema.statics.completedTickets = function() {
-    return this.completedTickets({status: 'completed'});
+    return this.find({status: 'completed'});
+}
+
+ticketSchema.statics.findByPriority = function(priority) {
+    return this.find({ priority: priority });
 }
 
 const Ticket = mongoose.model('Tickets', ticketSchema);

@@ -14,6 +14,33 @@ router.get('/',(req,res) => {
     })
 })
 
+router.get('/:id',(req,res) => {
+    Employee.findById(req.params.id)
+    .then((employee) => {
+        res.send(employee.shortInfo());
+    })
+    .catch((err) => {
+        res.send(err);
+    });
+});
+
+// calling 'instance method' on the value returned by the class 'Employee' 
+router.get('/show/short_info',(req,res) => {
+    Employee.find()
+    .then((employees) => {
+        // let result = [];
+        // for(let emp of employees) {
+        //    result.push(emp.shortInfo())
+        // }
+        // res.send(result);
+        let result = employees.map(emp => emp.shortInfo());
+        res.send(result);
+    })
+    .catch((err) => {
+        res.send(err);
+    })
+});
+
 router.get('/list',(req,res) => {
     let params = req.query;
     let orderBy = params.order == "ASC" ? 1: -1;

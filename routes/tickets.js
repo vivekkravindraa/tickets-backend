@@ -43,6 +43,25 @@ router.get('/:id',(req,res) => {
     })
 })
 
+router.get('/status/open',(req,res) => {
+    Ticket.openTickets().then((tickets) => {
+        res.send(tickets);
+    })
+})
+
+router.get('/status/completed',(req,res) => {
+    Ticket.completedTickets().then((tickets) => {
+        res.send(tickets);
+    })
+})
+
+router.get('/priority/:value',(req,res) => {
+    let value = req.params.value;
+    Ticket.findByPriority(value).then((tickets) => {
+        res.send(tickets);
+    })
+})
+
 router.post('/',(req,res) => {
     // let body = req.body;
 
