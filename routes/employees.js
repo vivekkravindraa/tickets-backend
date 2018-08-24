@@ -1,8 +1,35 @@
 const express = require('express');
 const { Employee } = require('../models/employee');
+const { Ticket } = require('../models/ticket');
 const _ = require('lodash');
 
 const router = express.Router();
+
+router.get('/:id/tickets',(req,res) => {
+    let id = req.params.id;
+
+    // if(!ObjectId.isValid(id)) {
+    //     res.send({
+    //         notice: 'invalid object id'
+    //     })
+    // }
+
+    Ticket.find({ employee: id }).populate('employee')
+    .then((tickets) => {
+        if(tickets.length === 0) {
+            res.send({
+                notice: 'no tickets found'
+            })
+        }
+        res.send({
+            tickets,
+            notice: 'Displaying the tickets belonging to employee id'
+        });
+    })
+    .catch((err) => {
+        res.send(err);
+    })
+})
 
 // GET /employees/list?sort=name&order=ASC
 router.get('/list',(req,res) => {
@@ -45,7 +72,7 @@ router.get('/',(req,res) => {
 
 // calling an user-defined 'instance method' shortInfo()
 router.get('/:id',(req,res) => {
-    Employee.findById(req.params.id)
+    Employee.findById(req.params.id).populate('tickets')
     .then((employee) => {
         res.send(employee.shortInfo());
     })
@@ -106,7 +133,7 @@ router.post('/',(req,res) => {
 
     // _.pick() provided by lodash library
     // strong parameter check
-    let body = _.pick(req.body, ['name','email','department','salary','ageWhileJoining','address','hobbies','luckyNumbers','mobileNumbers']);
+    let body = _.pick(req.body, ['name','email','department','salary','ageWhileJoining','address','hobbies','luckyNumbers','mobileNumbers','tickets']);
     let employee = new Employee(body);
 
     employee.save()

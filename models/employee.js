@@ -71,7 +71,11 @@ const employeeSchema = new Schema({         // creating the Schema
                 type: String
             }
         }
-    ]
+    ],
+    tickets: [ {
+        type: Schema.Types.ObjectId,
+        ref: 'Ticket'
+    } ]
 });
 
 employeeSchema.methods.shortInfo = function() {
@@ -79,11 +83,12 @@ employeeSchema.methods.shortInfo = function() {
         _id: this._id,
         name: this.name,
         email: this.email,
-        numberCount: this.mobileNumbers.length
+        numberCount: this.mobileNumbers.length,
+        tickets: this.tickets
     }
 }
 
-const Employee = mongoose.model('Employees',employeeSchema);
+const Employee = mongoose.model('Employee',employeeSchema);
 
 module.exports = {
     Employee
@@ -95,12 +100,12 @@ module.exports = {
 // 	"name": "Ram",
 // 	"email": "ram@gmail.com",
 // 	"department": "Technical",
-// 	"salary": "30000",
-// 	"ageWhileJoining": "24",
+// 	"salary": 30000,
+// 	"ageWhileJoining": 24,
 // 	"address": {
 // 		"street": "29th Main Road",
 // 		"city": "Bangalore",
-// 		"pinCode": "560021" },
+// 		"pinCode": 560021 },
 // 	"hobbies": ["Singing","Web Designing"],
 // 	"luckyNumbers": [7,13,19],
 // 	"mobileNumbers": [{

@@ -1,5 +1,6 @@
 const express = require('express');
 const { Ticket } = require('../models/ticket');
+const { Employee } = require('../models/employee');
 const _ = require('lodash');
 
 const router = express.Router();
@@ -24,7 +25,7 @@ router.get('/:id',(req,res) => {
     //     })
     // }
 
-    Ticket.findById(id)
+    Ticket.findById(id).populate('employee')
     .then((ticket) => {
         // checking whether the id is available or not
         if(ticket) {
@@ -67,7 +68,7 @@ router.post('/',(req,res) => {
 
     // _.pick() provided by lodash library
     // strong parameter check
-    let body = _.pick(req.body, ['name', 'department', 'priority', 'message']);
+    let body = _.pick(req.body, ['name', 'department', 'priority', 'message','employee']);
     let ticket = new Ticket(body);
 
     ticket.save()
@@ -93,7 +94,7 @@ router.put('/:id',(req,res) => {
     // }
 
     // parameters allowed to be updated
-    let body = _.pick(req.body, ['name', 'department', 'priority', 'message', 'status']);
+    let body = _.pick(req.body, ['name', 'department', 'priority', 'message', 'status', 'employee']);
 
     Ticket.findByIdAndUpdate(id, { $set: body}, { new: true})
     .then((ticket) => {
