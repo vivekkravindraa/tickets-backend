@@ -8,15 +8,14 @@ var mobNumberHandle = document.getElementById('mobNumber');
 
 var employees;
 
-function clickToRemove(empId, mobId) {
-    var id = empId;
-    var mobile_id = mobId;
-    axios.delete(`http://localhost:3000/employees/${id}/mobile_numbers/${mobile_id}`)
+function clickToRemove(link, empid, mobid) {
+    axios.delete(`http://localhost:3000/employees/${empid}/mobile_numbers/${mobid}`)
     .then((response) => {
         console.log(response.data);
+        link.parentNode.parentNode.removeChild(link.parentNode);
     })
     .catch((err) => {
-        console.log(err);
+        res.send(err);
     })
 }
 
@@ -41,16 +40,14 @@ function buildList(employee) {
         
         var a = document.createElement('a');
         var aText = document.createTextNode('Remove');
-        a.setAttribute('data-method','DELETE');
-        a.setAttribute('href',`http://localhost:3000/employees/${employee._id}/mobile_numbers/${mobNumber._id}`);
-        a.setAttribute('empId',`${employee._id}`);
-        a.setAttribute('mobId',`${mobNumber._id}`);
-        a.setAttribute('onclick','clickToRemove(this.empId, this.mobId)')
+        a.setAttribute('href','#');
+        a.setAttribute('empid',`${employee._id}`);
+        a.setAttribute('mobid',`${mobNumber._id}`);        
+        a.setAttribute('onclick','clickToRemove(this, this.empid, this.mobid)');
+
         a.appendChild(aText);
-        
         li.appendChild(liText);
         li.appendChild(a);
-        console.log(li);
         ol.appendChild(li);
     })
     appHandle.appendChild(ol);

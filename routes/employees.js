@@ -121,20 +121,43 @@ router.post('/',(req,res) => {
     })
 })
 
+// router.put('/:id',(req,res) => {
+//     let id = req.params.id;
+//     let body = req.body;
+
+//     // if(!ObjectId.isValid(id)) {
+//     //     res.send({
+//     //         notice: 'invalid object id'
+//     //     })
+//     // }
+
+//     // parameters allowed to be updated
+//     // let body = _.pick(req.body, []);
+
+//     Employee.findByIdAndUpdate(id, { $set: body}, { new: true})
+//     .then((employee) => {
+//         if(employee) {
+//             res.send({
+//                 employee,
+//                 notice: 'Successfully updated the employee'
+//             });
+//         } else {
+//             res.send({
+//                 notice: 'Employee not found'
+//             });
+//         }
+//     })
+//     .catch((err) => {
+//         res.send(err);
+//     })
+// })
+
+// applying runValidators to perform the validations
 router.put('/:id',(req,res) => {
     let id = req.params.id;
     let body = req.body;
 
-    // if(!ObjectId.isValid(id)) {
-    //     res.send({
-    //         notice: 'invalid object id'
-    //     })
-    // }
-
-    // parameters allowed to be updated
-    // let body = _.pick(req.body, []);
-
-    Employee.findByIdAndUpdate(id, { $set: body}, { new: true})
+    Employee.findByIdAndUpdate(id, { $set: body}, { new: true, runValidators: true})
     .then((employee) => {
         if(employee) {
             res.send({

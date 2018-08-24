@@ -5,6 +5,9 @@ const ticketSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    code: {
+        type: String
+    },
     department: {
         type: String,
         required: true
@@ -39,6 +42,14 @@ ticketSchema.statics.completedTickets = function() {
 ticketSchema.statics.findByPriority = function(priority) {
     return this.find({ priority: priority });
 }
+
+ticketSchema.pre('save', function(next) {
+    if(!this.code) {
+        // this.code = 'DCT-' + Math.ceil(Math.random() * 1000);
+        this.code = 'DCT-' + this._id.toString().slice(12);
+    }
+    next();
+});
 
 const Ticket = mongoose.model('Tickets', ticketSchema);
 
