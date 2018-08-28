@@ -8,14 +8,13 @@ var mobNumberHandle = document.getElementById('mobNumber');
 
 var employees;
 
-function clickToRemove(link, empid, mobid) {
+function clickToRemove(empid, mobid) {
     axios.delete(`http://localhost:3000/employees/${empid}/mobile_numbers/${mobid}`)
     .then((response) => {
-        console.log(response.data);
-        link.parentNode.parentNode.removeChild(link.parentNode);
+        document.getElementById(`${empid}`).removeChild(document.getElementById(`${mobid}`));
     })
     .catch((err) => {
-        res.send(err);
+        console.log(err);
     })
 }
 
@@ -41,13 +40,12 @@ function buildList(employee) {
         var a = document.createElement('a');
         var aText = document.createTextNode('Remove');
         a.setAttribute('href','#');
-        a.setAttribute('empid',`${employee._id}`);
-        a.setAttribute('mobid',`${mobNumber._id}`);        
-        a.setAttribute('onclick','clickToRemove(this, this.empid, this.mobid)');
+        a.setAttribute('onclick',`clickToRemove(\'employee._id', \'mobNumber._id')`);
 
         a.appendChild(aText);
         li.appendChild(liText);
         li.appendChild(a);
+        console.log(li);
         ol.appendChild(li);
     })
     appHandle.appendChild(ol);
