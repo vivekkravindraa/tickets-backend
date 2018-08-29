@@ -40,7 +40,7 @@ function buildList(employee) {
         var a = document.createElement('a');
         var aText = document.createTextNode('Remove');
         a.setAttribute('href','#');
-        a.setAttribute('onclick',`clickToRemove(\'employee._id', \'mobNumber._id')`);
+        a.setAttribute('onclick',`clickToRemove(\`${employee._id}\`, \`${mobNumber._id}\`)`);
 
         a.appendChild(aText);
         li.appendChild(liText);
