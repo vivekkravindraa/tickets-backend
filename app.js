@@ -8,6 +8,7 @@ const morgan = require('morgan');                               // requiring mor
 const mongoose = require('./config/db');                        // requiring configured-db
 const { Ticket } = require('./models/ticket');                  // requiring model-ticket
 const { Employee } = require('./models/employee');              // requiring model-employee
+const { User } = require('./models/user');                      // requiring model-user
 
 const { ticketsRouter } = require('./routes/tickets');          // requiring routes-tickets
 const { employeesRouter } = require('./routes/employees');      // requiring routes-employees
