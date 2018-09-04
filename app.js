@@ -12,6 +12,7 @@ const { User } = require('./models/user');                      // requiring mod
 
 const { ticketsRouter } = require('./routes/tickets');          // requiring routes-tickets
 const { employeesRouter } = require('./routes/employees');      // requiring routes-employees
+const { usersRouter } = require('./routes/users');              // requiring routes-users
 
 const app = express();                                          // obtaining express() returned function 
 const port = 3000;                                              // setting localhost port number
@@ -24,6 +25,7 @@ app.use(morgan('short'));
 
 app.use('/tickets',ticketsRouter);
 app.use('/employees',employeesRouter);
+app.use('/users',usersRouter);
 
 // app.use(morgan(function (tokens, req, res) {
 //     return [

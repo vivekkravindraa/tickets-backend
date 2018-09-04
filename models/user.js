@@ -1,17 +1,22 @@
 const mongoose = require('mongoose');
+
 const validator = require('validator');
+const jwt = require('jsonwebtoken');
+const _ = require('lodash');
 
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
     username: {
         type: String,
+        trim: true,
         required: true,
-        minlength: 6
+        unique: true
     },
     email: {
         type: String,
         required: true,
+        unique: true,
         validate: {
             validator: function(value) {
                 return validator.isEmail(value);
@@ -30,7 +35,7 @@ const userSchema = new Schema({
         required: true,
         validate: {
             validator: function(value) {
-                return validator.isNumeric(value) && validator.isLength(10);
+                return validator.isNumeric(value) && validator.isLength(value, {min: 10, max: 10});
             },
             message: 'should be 10 digits'
         }
@@ -48,6 +53,27 @@ const userSchema = new Schema({
         }
     ]
 })
+
+// toJSON instance method is specific to users model in this case
+userSchema.methods.toJSON = function() {
+    return _.pick(this, ['_id','username','email','mobile']);
+}
+
+userSchema.methods.generateToken = function() {
+    let tokenData = {
+        _id: this._id
+    };
+    
+    let generatedTokenInfo = {
+        access: 'auth',
+        token: jwt.sign(tokenData, 'supersecret')
+    }
+
+    this.tokens.push(generatedTokenInfo);
+    return this.save().then((user) => {
+        return generatedTokenInfo.token;
+    });
+}
 
 const User = mongoose.model('User',userSchema);
 
