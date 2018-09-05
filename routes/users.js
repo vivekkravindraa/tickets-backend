@@ -2,6 +2,7 @@ const express = require('express');
 const { Employee } = require('../models/employee');
 const { Ticket } = require('../models/ticket');
 const { User } = require('../models/user');
+const { authenticateUser } = require('../middlewares/authentication');
 const _ = require('lodash');
 
 const router = express.Router();
@@ -16,6 +17,7 @@ router.get('/',(req,res) => {
     })
 })
 
+// signup route
 router.post('/',(req,res) => {
     let body = _.pick(req.body, ['username','email','password','mobile']);
     let user = new User(body);
@@ -33,6 +35,12 @@ router.post('/',(req,res) => {
     .catch((err) => {
         res.status(400).send(err);
     })
+})
+
+// user profile
+// between functions if we want to pass along the data, we can attach it through req.locals object
+router.get('/profile',authenticateUser,(req,res) => {
+    res.send(req.locals.user);
 })
 
 module.exports = {

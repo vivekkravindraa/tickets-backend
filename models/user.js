@@ -54,6 +54,21 @@ const userSchema = new Schema({
     ]
 })
 
+userSchema.statics.findByToken = function(token) {
+    let User = this;
+    let tokenData;
+    try {
+        tokenData = jwt.verify(token, 'supersecret')
+    } catch(e) {
+        // return new Promse((resolve,reject) => {
+        //     reject(e);
+        // })
+        // OR
+        return Promise.reject(e);
+    }
+    return User.findOne({ '_id': tokenData._id, 'tokens.token': token})
+}
+
 // toJSON instance method is specific to users model in this case
 userSchema.methods.toJSON = function() {
     return _.pick(this, ['_id','username','email','mobile']);

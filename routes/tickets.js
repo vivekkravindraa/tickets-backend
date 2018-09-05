@@ -1,11 +1,12 @@
 const express = require('express');
 const { Ticket } = require('../models/ticket');
 const { Employee } = require('../models/employee');
+const { authenticateUser } = require('../middlewares/authentication');
 const _ = require('lodash');
 
 const router = express.Router();
 
-router.get('/',(req,res) => {
+router.get('/', authenticateUser, (req,res) => {
     Ticket.find()
     .then((tickets) => {
         res.send(tickets);
@@ -15,7 +16,7 @@ router.get('/',(req,res) => {
     })
 })
 
-router.get('/:id',(req,res) => {
+router.get('/:id', authenticateUser, (req,res) => {
     let id = req.params.id;
 
     // checking whether the id is valid or not
@@ -44,26 +45,26 @@ router.get('/:id',(req,res) => {
     })
 })
 
-router.get('/status/open',(req,res) => {
+router.get('/status/open', authenticateUser, (req,res) => {
     Ticket.openTickets().then((tickets) => {
         res.send(tickets);
     })
 })
 
-router.get('/status/completed',(req,res) => {
+router.get('/status/completed', authenticateUser, (req,res) => {
     Ticket.completedTickets().then((tickets) => {
         res.send(tickets);
     })
 })
 
-router.get('/priority/:value',(req,res) => {
+router.get('/priority/:value', authenticateUser, (req,res) => {
     let value = req.params.value;
     Ticket.findByPriority(value).then((tickets) => {
         res.send(tickets);
     })
 })
 
-router.post('/',(req,res) => {
+router.post('/', authenticateUser, (req,res) => {
     // let body = req.body;
 
     // _.pick() provided by lodash library
@@ -83,7 +84,7 @@ router.post('/',(req,res) => {
     })
 })
 
-router.put('/:id',(req,res) => {
+router.put('/:id', authenticateUser, (req,res) => {
     let id = req.params.id;
     // let body = req.body;
 
@@ -114,7 +115,7 @@ router.put('/:id',(req,res) => {
     })
 })
 
-router.delete('/:id',(req,res) => {
+router.delete('/:id', authenticateUser, (req,res) => {
     let id = req.params.id;
     
     // if(!ObjectId.isValid(id)) {
@@ -141,7 +142,7 @@ router.delete('/:id',(req,res) => {
     })
 })
 
-router.get('/latest/:value',(req,res) => {
+router.get('/latest/:value', authenticateUser, (req,res) => {
     let value = req.params.value;
     Ticket.find().limit(parseInt(value))
     .then((tickets) => {
@@ -152,7 +153,7 @@ router.get('/latest/:value',(req,res) => {
     })
 })
 
-router.get('/department/:name',(req,res) => {
+router.get('/department/:name', authenticateUser, (req,res) => {
     let name = req.params.name;  
     Ticket.find({ department: `${name}` })
     .then((tickets) => {
