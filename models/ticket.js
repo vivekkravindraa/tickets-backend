@@ -32,6 +32,10 @@ const ticketSchema = new Schema({
     employee: {
         type: Schema.Types.ObjectId,
         ref: 'Employee'
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     }
 })
 
