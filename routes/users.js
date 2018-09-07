@@ -37,6 +37,32 @@ router.post('/',(req,res) => {
     })
 })
 
+// login route
+router.post('/login',(req,res) => {
+    let body = _.pick(req.body, ['email','password']);
+    User.findByEmailAndPassword(body.email, body.password)
+    .then((user) => {
+        return user.generateToken();
+    })
+    .then((token) => {
+        res.header('x-auth',token).send();
+    })
+    .catch((err) => {
+        res.send(err);
+    })
+})
+
+// logout route
+router.delete('/logout', authenticateUser, (req,res) => {
+    req.locals.user.deleteToken(req.locals.token)
+    .then(() => {
+        res.send();
+    })
+    .catch(() => {
+        res.send(err);
+    })
+})
+
 // user profile
 // between functions if we want to pass along the data, we can attach it through req.locals object
 router.get('/profile',authenticateUser,(req,res) => {
