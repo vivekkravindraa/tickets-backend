@@ -240,7 +240,8 @@ router.get('/:id/mobile_numbers',(req,res) => {
         res.send({
             notice:  'Employee not found'
         })
-    }).catch((err) => {
+    })
+    .catch((err) => {
         res.send(err);
     })
 })
@@ -265,7 +266,8 @@ router.post('/:id/mobile_numbers',(req,res) => {
             newMobile,
             notice: 'Successfully added mobile number'
         })
-    }).catch((err) => {
+    })
+    .catch((err) => {
         res.send(err);
     })
 })
@@ -294,7 +296,7 @@ router.put('/:id/mobile_numbers/:mobile_id',(req,res) => {
         })
     })
     .catch((err) => {
-        res.send(err)
+        res.send(err);
     })
 })
 
