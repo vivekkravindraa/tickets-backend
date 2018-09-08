@@ -1,6 +1,5 @@
 const express = require('express');
 const { Ticket } = require('../models/ticket');
-const { Employee } = require('../models/employee');
 const { authenticateUser } = require('../middlewares/authentication');
 const _ = require('lodash');
 

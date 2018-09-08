@@ -1,6 +1,4 @@
 const express = require('express');
-const { Employee } = require('../models/employee');
-const { Ticket } = require('../models/ticket');
 const { User } = require('../models/user');
 const { authenticateUser } = require('../middlewares/authentication');
 const _ = require('lodash');
@@ -58,7 +56,7 @@ router.delete('/logout', authenticateUser, (req,res) => {
     .then(() => {
         res.send();
     })
-    .catch(() => {
+    .catch((err) => {
         res.send(err);
     })
 })
