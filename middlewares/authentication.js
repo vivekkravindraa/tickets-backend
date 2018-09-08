@@ -5,8 +5,8 @@ let authenticateUser = ((req,res,next) => {
     User.findByToken(token)
     .then((user) => {
         // between functions if we want to pass along the data, we can attach it through req.locals object
-        //  req.user = user;
-        //  req.token = token;
+        // req.user = user;
+        // req.token = token;
 
         // to make these data available, not only in the next function, but also to make it available in views
         req.locals = {

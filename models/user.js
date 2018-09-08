@@ -83,7 +83,7 @@ userSchema.statics.findByToken = function(token) {
         // OR
         return Promise.reject(e);
     }
-    return User.findOne({ '_id': tokenData._id, 'tokens.token': token})
+    return User.findOne({ '_id': tokenData._id, 'tokens.token': token })
 }
 
 userSchema.statics.findByEmailAndPassword = function(email, password) {
