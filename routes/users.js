@@ -36,7 +36,7 @@ router.post('/',(req,res) => {
 })
 
 // login route
-router.post('/login',(req,res) => {
+router.post('/login', authenticateUser, (req,res) => {
     let body = _.pick(req.body, ['email','password']);
     User.findByEmailAndPassword(body.email, body.password)
     .then((user) => {
