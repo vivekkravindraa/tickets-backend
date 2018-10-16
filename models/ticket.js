@@ -63,3 +63,14 @@ ticketSchema.pre('save', function(next) {
 const Ticket = mongoose.model('Ticket', ticketSchema);
 
 module.exports = { Ticket }
+
+// Sample Object
+
+// {
+//     "name": "Ravi",
+//     "department": "Technical",
+//     "priority": "High",
+//     "message": "Net is down",
+//     "employee": "5bc59e9f2206fc325133a0e1",
+//     "user": "5bc59d2e23447a309eebbe0d"
+// }
