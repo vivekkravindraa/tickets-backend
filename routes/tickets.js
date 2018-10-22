@@ -5,7 +5,8 @@ const _ = require('lodash');
 
 const router = express.Router();
 
-router.get('/', authenticateUser, (req,res) => {
+// removed authenticateUser to work with react
+router.get('/', (req,res) => {
     Ticket.find()
     .then((tickets) => {
         res.send(tickets);

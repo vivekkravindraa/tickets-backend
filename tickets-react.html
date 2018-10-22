@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> AJAX React Class Component </title>
+    <script src="js/react.development.js"></script>
+    <script src="js/react-dom.development.js"></script>
+    <script src="js/babel.js"></script>
+</head>
+<body>
+    <div id="app">
+
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="text/babel">
+        const appHandle = document.getElementById('app');
+
+        function Heading(props) {
+            return (
+                <h2> { props.title } </h2> 
+            )
+        }
+
+        class Users extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    tickets: [],
+                    isLoaded: false,
+                    search: ''
+                }
+                this.displayTable = this.displayTable.bind(this);
+            }
+
+            componentDidMount() {
+                setTimeout(() => {
+                    axios.get(`http://localhost:3000/tickets`)
+                    .then((response) => {
+                        console.log(response.data);
+                        this.setState({
+                            tickets: response.data, 
+                            isLoaded: true
+                        })
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+                }, 1000)
+            }
+
+            displayTable() {
+                return (
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>CODE</th>
+                                <th>NAME</th>
+                                <th>DEPARTMENT</th>
+                                <th>PRIORITY</th>
+                                <th>MESSAGE</th>
+                                <th>STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.state.tickets.map((ticket, index) => {
+                                return <UserDetail ticket={ticket} key={index} />
+                            })}
+                        </tbody>
+                    </table>
+               )
+            }
+
+            render() {
+                return (
+                    <div>
+                        { this.state.isLoaded ? this.displayTable() : <img src="./loader.gif" /> }
+                    </div>
+                )
+            }
+        }
+
+        class UserDetail extends React.Component {
+            constructor(props) {
+                super(props);
+                // this.state = {
+                //     ticket: props.ticket
+                // }
+            }
+            render() {
+                return (
+                    <tr>
+                        <td> {this.props.ticket.code} </td>
+                        <td> {this.props.ticket.name} </td>
+                        <td> {this.props.ticket.department} </td>
+                        <td> {this.props.ticket.priority} </td>
+                        <td> {this.props.ticket.message} </td>
+                        <td> {this.props.ticket.status} </td>
+                    </tr>
+                )
+            }
+        }
+
+        function App() {
+            return (
+                <div>
+                    <Heading title="Listing Tickets" />
+                    <Users />
+                </div>
+            )
+        }
+
+        ReactDOM.render(<App />,appHandle);
+    </script>
+</body>
+</html>
